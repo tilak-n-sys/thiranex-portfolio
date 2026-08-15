@@ -3,60 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Contact Your Name for web development opportunities and collaboration.">
-  <meta name="author" content="Your Name">
-  <meta name="robots" content="index, follow">
   <title>Contact | Tilak N</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+<body>
   <header>
-    <nav aria-label="Main navigation">
-      <a href="index.html">Your Name</a>
-      <ul>
+    <nav class="navbar">
+      <a class="logo" href="index.html">Tilak N</a>
+
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
-        <li><a href="contact.html" aria-current="page">Contact</a></li>
+        <li><a class="active" href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main-content">
-    <section aria-labelledby="contact-heading">
-      <h1 id="contact-heading">Contact Me</h1>
-      <p>If you would like to get in touch, please complete the form below.</p>
+  <main>
+    <section class="page-header">
+      <p class="eyebrow">GET IN TOUCH</p>
+      <h1>Contact Me</h1>
+      <p>Have a question or want to connect? Get in touch.</p>
+    </section>
 
-      <form action="#" method="post" aria-label="Contact form">
-        <div>
-          <label for="name">Full Name</label>
-          <input type="text" id="name" name="name" autocomplete="name" required aria-required="true">
-        </div>
+    <section class="contact-section">
+      <div class="contact-card">
+        <h2>Let's Connect</h2>
 
-        <div>
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" autocomplete="email" required aria-required="true">
-        </div>
+        <p>
+          I'm always interested in learning, collaborating,
+          and working on interesting web projects.
+        </p>
 
-        <div>
-          <label for="subject">Subject</label>
-          <input type="text" id="subject" name="subject" required aria-required="true">
-        </div>
-
-        <div>
-          <label for="message">Message</label>
-          <textarea id="message" name="message" rows="6" required aria-required="true"></textarea>
-        </div>
-
-        <button type="submit">Send Message</button>
-      </form>
+        <a class="button" href="mailto:your-email@example.com">
+          Email Me
+        </a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Tilak N. All rights reserved.</p>
+    <p>© 2026 Tilak N. All rights reserved.</p>
   </footer>
 </body>
 </html>
