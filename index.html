@@ -3,20 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Personal portfolio of Tilak N, a web development student building accessible and responsive websites.">
-  <meta name="author" content="Tilak N">
-  <meta name="robots" content="index, follow">
-  <title>Tilak N | Web Developer Portfolio</title>
+  <title>Tilak N | Portfolio</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+<body>
   <header>
-    <nav aria-label="Main navigation">
-      <a href="index.html">Tilak N</a>
-      <ul>
-        <li><a href="index.html" aria-current="page">Home</a></li>
+    <nav class="navbar">
+      <a class="logo" href="index.html">Tilak N</a>
+
+      <ul class="nav-links">
+        <li><a class="active" href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
         <li><a href="contact.html">Contact</a></li>
@@ -24,27 +21,38 @@
     </nav>
   </header>
 
-  <main id="main-content">
-    <section aria-labelledby="welcome-heading">
-      <h1 id="welcome-heading">Hello, I'm Your Tilak N</h1>
-      <p>I'm a web development student passionate about creating accessible, responsive, and user-friendly websites.</p>
-      <p><a href="projects.html">View My Projects</a></p>
+  <main>
+    <section class="hero">
+      <p class="eyebrow">WEB DEVELOPMENT • ENGINEERING STUDENT</p>
+
+      <h1>Hello, I'm <span>Tilak N</span>.</h1>
+
+      <p class="hero-text">
+        I build responsive, accessible, and user-friendly websites
+        using modern web technologies.
+      </p>
+
+      <div class="buttons">
+        <a class="button" href="projects.html">View My Projects</a>
+        <a class="button secondary" href="contact.html">Contact Me</a>
+      </div>
     </section>
 
-    <section aria-labelledby="skills-heading">
-      <h2 id="skills-heading">My Skills</h2>
-      <ul>
-        <li>HTML5</li>
-        <li>CSS3</li>
-        <li>JavaScript</li>
-        <li>Responsive Web Design</li>
-        <li>Web Accessibility</li>
-      </ul>
+    <section class="section">
+      <h2>My Skills</h2>
+
+      <div class="skills">
+        <div class="card">HTML5</div>
+        <div class="card">CSS3</div>
+        <div class="card">JavaScript</div>
+        <div class="card">Responsive Design</div>
+        <div class="card">Web Accessibility</div>
+      </div>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Tilak N. All rights reserved.</p>
+    <p>© 2026 Tilak N. All rights reserved.</p>
   </footer>
 </body>
 </html>
