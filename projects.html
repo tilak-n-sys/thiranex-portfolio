@@ -3,52 +3,78 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Explore web development projects created by Your Name.">
-  <meta name="author" content="Tilak N">
-  <meta name="robots" content="index, follow">
   <title>Projects | Tilak N</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+<body>
   <header>
-    <nav aria-label="Main navigation">
-      <a href="index.html">Tilak N</a>
-      <ul>
+    <nav class="navbar">
+      <a class="logo" href="index.html">Tilak N</a>
+
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
-        <li><a href="projects.html" aria-current="page">Projects</a></li>
+        <li><a class="active" href="projects.html">Projects</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main-content">
-    <header>
-      <h1>My Projects</h1>
+  <main>
+    <section class="page-header">
+      <p class="eyebrow">MY WORK</p>
+      <h1>Projects</h1>
       <p>A selection of my web development work.</p>
-    </header>
+    </section>
 
-    <section aria-labelledby="projects-heading">
-      <h2 id="projects-heading">Featured Projects</h2>
-      <article>
-        <h3>Personal Portfolio</h3>
-        <p>A responsive portfolio website built using semantic HTML5 and CSS.</p>
+    <section class="projects">
+      <article class="project-card">
+        <span class="project-number">01</span>
+        <h2>Personal Portfolio</h2>
+        <p>
+          A responsive personal portfolio website built with
+          semantic HTML5 and CSS.
+        </p>
+        <div class="tags">
+          <span>HTML5</span>
+          <span>CSS3</span>
+          <span>Responsive</span>
+        </div>
       </article>
-      <article>
-        <h3>Accessible Web Page</h3>
-        <p>A web page designed using accessibility and WCAG principles.</p>
+
+      <article class="project-card">
+        <span class="project-number">02</span>
+        <h2>Accessible Web Page</h2>
+        <p>
+          A web page designed with accessibility and
+          user-friendly navigation in mind.
+        </p>
+        <div class="tags">
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>Accessibility</span>
+        </div>
       </article>
-      <article>
-        <h3>Student Web Project</h3>
-        <p>A practical project demonstrating modern frontend development skills.</p>
+
+      <article class="project-card">
+        <span class="project-number">03</span>
+        <h2>Student Web Project</h2>
+        <p>
+          A practical project demonstrating frontend
+          development and responsive design skills.
+        </p>
+        <div class="tags">
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>JavaScript</span>
+        </div>
       </article>
     </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Tilak N. All rights reserved.</p>
+    <p>© 2026 Tilak N. All rights reserved.</p>
   </footer>
 </body>
 </html>
