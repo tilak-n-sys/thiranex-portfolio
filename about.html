@@ -3,45 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Learn more about Your Name, a web development student interested in accessible web development.">
-  <meta name="author" content="Tilak N">
-  <meta name="robots" content="index, follow">
-  <title>About |Tilak N</title>
+  <title>About | Tilak N</title>
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-  <a class="skip-link" href="#main-content">Skip to main content</a>
 
+<body>
   <header>
-    <nav aria-label="Main navigation">
-      <a href="index.html">Tilak N</a>
-      <ul>
+    <nav class="navbar">
+      <a class="logo" href="index.html">Tilak N</a>
+
+      <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li><a href="about.html" aria-current="page">About</a></li>
+        <li><a class="active" href="about.html">About</a></li>
         <li><a href="projects.html">Projects</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main id="main-content">
-    <article>
-      <header>
-        <h1>About Me</h1>
-      </header>
-      <section aria-labelledby="profile-heading">
-        <h2 id="profile-heading">My Profile</h2>
-        <p>I am a web development student interested in building responsive, accessible, and user-friendly websites using modern web technologies.</p>
-      </section>
-      <section aria-labelledby="education-heading">
-        <h2 id="education-heading">Education</h2>
+  <main>
+    <section class="page-header">
+      <p class="eyebrow">ABOUT ME</p>
+      <h1>About Me</h1>
+      <p>Get to know me and my journey in web development.</p>
+    </section>
+
+    <section class="section">
+      <div class="content-card">
+        <h2>My Profile</h2>
+        <p>
+          I am an engineering student interested in web development
+          and modern web technologies. I enjoy creating responsive,
+          accessible, and user-friendly websites.
+        </p>
+      </div>
+
+      <div class="content-card">
+        <h2>Education</h2>
         <p>Engineering Student</p>
-      </section>
-    </article>
+      </div>
+
+      <div class="content-card">
+        <h2>My Goal</h2>
+        <p>
+          My goal is to continue improving my development skills and
+          build useful digital experiences.
+        </p>
+      </div>
+    </section>
   </main>
 
   <footer>
-    <p>&copy; 2026 Tilak N.All rights reserved.</p>
+    <p>© 2026 Tilak N. All rights reserved.</p>
   </footer>
 </body>
 </html>
