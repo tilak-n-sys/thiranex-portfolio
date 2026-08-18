@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
   // =========================
-  // TO-DO LIST CRUD
+  // TO-DO LIST
   // =========================
 
   const todoForm = document.getElementById("todo-form");
@@ -36,26 +36,52 @@ document.addEventListener("DOMContentLoaded", function () {
   const todoEmpty = document.getElementById("todo-empty");
   const filterButtons = document.querySelectorAll(".todo-filter");
 
-  // If this page doesn't contain the To-Do list, stop here.
-  if (!todoForm || !todoInput || !todoList) {
-    return;
-  }
+  // Load saved tasks
+  let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  let tasks = JSON.parse(localStorage.getItem("todoTasks")) || [];
   let currentFilter = "all";
 
 
   // =========================
-  // SAVE TASKS
+  // CREATE
+  // =========================
+
+  todoForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const taskText = todoInput.value.trim();
+
+    if (taskText === "") {
+      return;
+    }
+
+    const newTask = {
+      id: Date.now(),
+      text: taskText,
+      completed: false
+    };
+
+    tasks.push(newTask);
+
+    saveTasks();
+    renderTasks();
+
+    todoInput.value = "";
+    todoInput.focus();
+  });
+
+
+  // =========================
+  // SAVE TO LOCAL STORAGE
   // =========================
 
   function saveTasks() {
-    localStorage.setItem("todoTasks", JSON.stringify(tasks));
+    localStorage.setItem("tasks", JSON.stringify(tasks));
   }
 
 
   // =========================
-  // READ / DISPLAY TASKS
+  // READ / DISPLAY
   // =========================
 
   function renderTasks() {
@@ -86,92 +112,79 @@ document.addEventListener("DOMContentLoaded", function () {
         li.classList.add("completed");
       }
 
-      li.innerHTML = `
-        <label class="todo-task">
-          <input
-            type="checkbox"
-            class="todo-checkbox"
-            data-id="${task.id}"
-            ${task.completed ? "checked" : ""}
-          >
 
-          <span>${escapeHTML(task.text)}</span>
-        </label>
+      const checkbox = document.createElement("input");
 
-        <div class="todo-actions">
-          <button
-            type="button"
-            class="todo-edit"
-            data-id="${task.id}">
-            Edit
-          </button>
+      checkbox.type = "checkbox";
+      checkbox.checked = task.completed;
+      checkbox.dataset.id = task.id;
+      checkbox.className = "todo-checkbox";
 
-          <button
-            type="button"
-            class="todo-delete"
-            data-id="${task.id}">
-            Delete
-          </button>
-        </div>
-      `;
+
+      const span = document.createElement("span");
+
+      span.textContent = task.text;
+      span.className = "todo-text";
+
+
+      const editButton = document.createElement("button");
+
+      editButton.type = "button";
+      editButton.textContent = "Edit";
+      editButton.dataset.id = task.id;
+      editButton.className = "todo-edit";
+
+
+      const deleteButton = document.createElement("button");
+
+      deleteButton.type = "button";
+      deleteButton.textContent = "Delete";
+      deleteButton.dataset.id = task.id;
+      deleteButton.className = "todo-delete";
+
+
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      li.appendChild(editButton);
+      li.appendChild(deleteButton);
 
       todoList.appendChild(li);
     });
 
 
-    updateCount();
+    updateCount(filteredTasks.length);
 
     if (filteredTasks.length === 0) {
-      todoEmpty.hidden = false;
+      todoEmpty.style.display = "block";
     } else {
-      todoEmpty.hidden = true;
+      todoEmpty.style.display = "none";
     }
   }
 
 
   // =========================
-  // CREATE TASK
-  // =========================
-
-  todoForm.addEventListener("submit", function (event) {
-
-    event.preventDefault();
-
-    const text = todoInput.value.trim();
-
-    if (text === "") {
-      return;
-    }
-
-    const newTask = {
-      id: Date.now(),
-      text: text,
-      completed: false
-    };
-
-    tasks.push(newTask);
-
-    saveTasks();
-    renderTasks();
-
-    todoInput.value = "";
-    todoInput.focus();
-  });
-
-
-  // =========================
-  // UPDATE + DELETE TASK
+  // UPDATE
   // =========================
 
   todoList.addEventListener("click", function (event) {
 
     const id = Number(event.target.dataset.id);
 
-    // DELETE
-    if (event.target.classList.contains("todo-delete")) {
+    if (!id) {
+      return;
+    }
 
-      tasks = tasks.filter(function (task) {
-        return task.id !== id;
+
+    // Complete / Uncomplete task
+    if (event.target.classList.contains("todo-checkbox")) {
+
+      tasks = tasks.map(function (task) {
+
+        if (task.id === id) {
+          task.completed = event.target.checked;
+        }
+
+        return task;
       });
 
       saveTasks();
@@ -179,7 +192,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-    // EDIT
+    // Edit task
     if (event.target.classList.contains("todo-edit")) {
 
       const task = tasks.find(function (task) {
@@ -190,55 +203,37 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-      const updatedText = prompt("Edit your task:", task.text);
+      const newText = prompt("Edit your task:", task.text);
 
-      if (updatedText === null) {
-        return;
+      if (newText !== null && newText.trim() !== "") {
+
+        task.text = newText.trim();
+
+        saveTasks();
+        renderTasks();
       }
+    }
 
-      const cleanText = updatedText.trim();
 
-      if (cleanText === "") {
-        return;
-      }
+    // =========================
+    // DELETE
+    // =========================
 
-      task.text = cleanText;
+    if (event.target.classList.contains("todo-delete")) {
+
+      tasks = tasks.filter(function (task) {
+        return task.id !== id;
+      });
 
       saveTasks();
       renderTasks();
     }
+
   });
 
 
   // =========================
-  // COMPLETE TASK
-  // =========================
-
-  todoList.addEventListener("change", function (event) {
-
-    if (!event.target.classList.contains("todo-checkbox")) {
-      return;
-    }
-
-    const id = Number(event.target.dataset.id);
-
-    const task = tasks.find(function (task) {
-      return task.id === id;
-    });
-
-    if (!task) {
-      return;
-    }
-
-    task.completed = event.target.checked;
-
-    saveTasks();
-    renderTasks();
-  });
-
-
-  // =========================
-  // FILTER TASKS
+  // FILTER
   // =========================
 
   filterButtons.forEach(function (button) {
@@ -255,6 +250,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       renderTasks();
     });
+
   });
 
 
@@ -262,36 +258,20 @@ document.addEventListener("DOMContentLoaded", function () {
   // TASK COUNT
   // =========================
 
-  function updateCount() {
+  function updateCount(count) {
 
-    const activeTasks = tasks.filter(function (task) {
-      return !task.completed;
-    });
-
-    const count = activeTasks.length;
-
-    if (todoCount) {
-      todoCount.textContent =
-        count + (count === 1 ? " task" : " tasks") + " remaining";
+    if (count === 1) {
+      todoCount.textContent = "1 task";
+    } else {
+      todoCount.textContent = count + " tasks";
     }
   }
 
 
   // =========================
-  // SECURITY
+  // INITIAL LOAD
   // =========================
 
-  function escapeHTML(text) {
-
-    const div = document.createElement("div");
-
-    div.textContent = text;
-
-    return div.innerHTML;
-  }
-
-
-  // Show saved tasks when page opens
   renderTasks();
 
 });
