@@ -1,133 +1,391 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Tilak N | Portfolio</title>
+  <title>Weather Dashboard | JavaScript Project</title>
+  <meta
+    name="description"
+    content="A real-time weather dashboard using JavaScript Fetch API and async/await."
+  >
 
-  <link rel="stylesheet" href="styles.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      background: #0b1220;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+    }
+
+    header p {
+      color: #94a3b8;
+      margin-top: 10px;
+    }
+
+    main {
+      width: min(900px, 92%);
+      margin: 0 auto;
+      flex: 1;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 16px;
+      border: 2px solid #334155;
+      border-radius: 10px;
+      background: #111827;
+      color: white;
+      font-size: 16px;
+    }
+
+    .search-box button {
+      padding: 16px 25px;
+      border: none;
+      border-radius: 10px;
+      background: #6366f1;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .search-box button:hover {
+      background: #4f46e5;
+    }
+
+    .search-box button:focus,
+    .search-box input:focus {
+      outline: 3px solid #93c5fd;
+      outline-offset: 2px;
+    }
+
+    .status {
+      text-align: center;
+      margin: 20px 0;
+      min-height: 24px;
+      color: #fbbf24;
+    }
+
+    .weather-card {
+      display: none;
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 30px;
+      margin-bottom: 40px;
+    }
+
+    .weather-card.visible {
+      display: block;
+    }
+
+    .location {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .location h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .location p {
+      color: #94a3b8;
+    }
+
+    .weather-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .weather-item {
+      background: #1e293b;
+      padding: 25px 15px;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .weather-item span {
+      display: block;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .weather-item strong {
+      font-size: 25px;
+    }
+
+    .error {
+      color: #f87171;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #64748b;
+      border-top: 1px solid #1e293b;
+    }
+
+    @media (max-width: 600px) {
+      .search-box {
+        flex-direction: column;
+      }
+
+      .weather-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .location h2 {
+        font-size: 26px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
   <header>
-    <nav class="navbar">
-
-      <a class="logo" href="index.html">
-        Tilak N
-      </a>
-
-      <ul class="nav-links">
-
-        <li>
-          <a class="active" href="index.html">Home</a>
-        </li>
-
-        <li>
-          <a href="about.html">About</a>
-        </li>
-
-        <li>
-          <a href="projects.html">Projects</a>
-        </li>
-
-        <li>
-          <a href="contact.html">Contact</a>
-        </li>
-
-      </ul>
-
-      <button
-        id="theme-toggle"
-        type="button"
-        aria-label="Toggle light and dark mode">
-        ☀️ / 🌙
-      </button>
-
-    </nav>
+    <h1>Weather Dashboard</h1>
+    <p>Search for a city to view its current weather.</p>
   </header>
 
-
   <main>
+    <form class="search-box" id="weatherForm">
+      <label for="cityInput" class="sr-only">Enter city name</label>
 
-    <section class="hero">
+      <input
+        type="text"
+        id="cityInput"
+        placeholder="Enter city name..."
+        autocomplete="off"
+        required
+      >
 
-      <p class="eyebrow">
-        WEB DEVELOPMENT • ENGINEERING STUDENT
-      </p>
+      <button type="submit" id="searchButton">
+        Search
+      </button>
+    </form>
 
-      <h1>
-        Hello, I'm <span>Tilak N</span>.
-      </h1>
+    <p
+      id="status"
+      class="status"
+      role="status"
+      aria-live="polite"
+    ></p>
 
-      <p class="hero-text">
-        I build responsive, accessible, and user-friendly websites
-        using modern web technologies.
-      </p>
-
-      <div class="buttons">
-
-        <a class="button" href="projects.html">
-          View My Projects
-        </a>
-
-        <a class="button secondary" href="contact.html">
-          Contact Me
-        </a>
-
+    <section
+      id="weatherCard"
+      class="weather-card"
+      aria-live="polite"
+    >
+      <div class="location">
+        <h2 id="locationName">--</h2>
+        <p id="weatherDescription">--</p>
       </div>
 
-    </section>
+      <div class="weather-grid">
 
+        <article class="weather-item">
+          <span>🌡️ Temperature</span>
+          <strong id="temperature">--</strong>
+        </article>
 
-    <section class="section">
+        <article class="weather-item">
+          <span>💧 Humidity</span>
+          <strong id="humidity">--</strong>
+        </article>
 
-      <h2>
-        My Skills
-      </h2>
-
-      <div class="skills">
-
-        <div class="card">
-          HTML5
-        </div>
-
-        <div class="card">
-          CSS3
-        </div>
-
-        <div class="card">
-          JavaScript
-        </div>
-
-        <div class="card">
-          Responsive Design
-        </div>
-
-        <div class="card">
-          Web Accessibility
-        </div>
+        <article class="weather-item">
+          <span>💨 Wind Speed</span>
+          <strong id="windSpeed">--</strong>
+        </article>
 
       </div>
-
     </section>
-
   </main>
 
-
   <footer>
-
-    <p>
-      © 2026 Tilak N. All rights reserved.
-    </p>
-
+    <p>© 2026 Weather Dashboard</p>
   </footer>
 
+  <script>
+    const weatherForm = document.getElementById("weatherForm");
+    const cityInput = document.getElementById("cityInput");
+    const searchButton = document.getElementById("searchButton");
 
-  <script src="script.js"></script>
+    const statusMessage = document.getElementById("status");
+    const weatherCard = document.getElementById("weatherCard");
+
+    const locationName = document.getElementById("locationName");
+    const weatherDescription = document.getElementById("weatherDescription");
+    const temperature = document.getElementById("temperature");
+    const humidity = document.getElementById("humidity");
+    const windSpeed = document.getElementById("windSpeed");
+
+
+    /*
+      Convert Open-Meteo weather codes into readable descriptions.
+    */
+    function getWeatherDescription(code) {
+      const weatherCodes = {
+        0: "Clear sky",
+        1: "Mainly clear",
+        2: "Partly cloudy",
+        3: "Overcast",
+        45: "Fog",
+        48: "Depositing rime fog",
+        51: "Light drizzle",
+        53: "Moderate drizzle",
+        55: "Dense drizzle",
+        61: "Slight rain",
+        63: "Moderate rain",
+        65: "Heavy rain",
+        71: "Slight snow",
+        73: "Moderate snow",
+        75: "Heavy snow",
+        80: "Slight rain showers",
+        81: "Moderate rain showers",
+        82: "Violent rain showers",
+        95: "Thunderstorm",
+        96: "Thunderstorm with hail",
+        99: "Thunderstorm with heavy hail"
+      };
+
+      return weatherCodes[code] || "Unknown weather";
+    }
+
+
+    /*
+      Search for the city using the Open-Meteo Geocoding API.
+    */
+    async function getCityCoordinates(city) {
+      const url =
+        `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Unable to search for the city.");
+      }
+
+      const data = await response.json();
+
+      if (!data.results || data.results.length === 0) {
+        throw new Error("City not found. Please check the city name.");
+      }
+
+      return data.results[0];
+    }
+
+
+    /*
+      Fetch current weather using the coordinates.
+    */
+    async function getWeather(latitude, longitude) {
+      const url =
+        `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m&timezone=auto`;
+
+      const response = await fetch(url);
+
+      if (!response.ok) {
+        throw new Error("Unable to fetch weather data.");
+      }
+
+      return await response.json();
+    }
+
+
+    /*
+      Display the weather data dynamically in the DOM.
+    */
+    function displayWeather(city, weatherData) {
+      const current = weatherData.current;
+
+      locationName.textContent =
+        `${city.name}, ${city.country}`;
+
+      weatherDescription.textContent =
+        getWeatherDescription(current.weather_code);
+
+      temperature.textContent =
+        `${current.temperature_2m}°C`;
+
+      humidity.textContent =
+        `${current.relative_humidity_2m}%`;
+
+      windSpeed.textContent =
+        `${current.wind_speed_10m} km/h`;
+
+      weatherCard.classList.add("visible");
+    }
+
+
+    /*
+      Handle form submission.
+    */
+    async function handleSearch(event) {
+      event.preventDefault();
+
+      const city = cityInput.value.trim();
+
+      if (!city) {
+        statusMessage.textContent = "Please enter a city name.";
+        statusMessage.className = "status error";
+        return;
+      }
+
+      statusMessage.textContent = "Loading weather data...";
+      statusMessage.className = "status";
+
+      weatherCard.classList.remove("visible");
+      searchButton.disabled = true;
+
+      try {
+        // Step 1: Find city coordinates
+        const cityData = await getCityCoordinates(city);
+
+        // Step 2: Get weather using coordinates
+        const weatherData = await getWeather(
+          cityData.latitude,
+          cityData.longitude
+        );
+
+        // Step 3: Display the result
+        displayWeather(cityData, weatherData);
+
+        statusMessage.textContent = "Weather data updated successfully.";
+      } catch (error) {
+        statusMessage.textContent = error.message;
+        statusMessage.className = "status error";
+      } finally {
+        searchButton.disabled = false;
+      }
+    }
+
+
+    weatherForm.addEventListener("submit", handleSearch);
+  </script>
 
 </body>
-
 </html>
