@@ -103,11 +103,17 @@ async function fetchJson(url) {
 }
 
 
+/*
+ * Search for a city.
+ *
+ * The API may return several cities with the same name.
+ * We prefer an Indian result when one is available.
+ */
 async function findCity(city) {
 
   const params = new URLSearchParams({
     name: city,
-    count: "1",
+    count: "10",
     language: "en",
     format: "json"
   });
@@ -122,14 +128,25 @@ async function findCity(city) {
     );
   }
 
-  return data.results[0];
+  /*
+   * Prefer India for ambiguous city names.
+   * For example, "Bangalore" can otherwise match
+   * Bangalore Town in Pakistan.
+   */
+  const indianCity = data.results.find(
+    result => result.country_code === "IN"
+  );
+
+  return indianCity || data.results[0];
 }
 
 
 async function fetchWeather(latitude, longitude) {
 
   const params = new URLSearchParams({
+
     latitude: latitude,
+
     longitude: longitude,
 
     current:
@@ -159,13 +176,16 @@ function renderCurrentWeather(city, weather) {
 
   const units = weather.current_units;
 
-  const [description, icon] =
-    getWeatherDescription(
-      current.weather_code
-    );
+  const [
+    description,
+    icon
+  ] = getWeatherDescription(
+    current.weather_code
+  );
 
 
-  locationName.textContent = city.name;
+  locationName.textContent =
+    `${city.name}, ${city.country}`;
 
 
   const regionParts = [
@@ -190,7 +210,8 @@ function renderCurrentWeather(city, weather) {
     `${Math.round(current.temperature_2m)}${units.temperature_2m}`;
 
 
-  condition.textContent = description;
+  condition.textContent =
+    description;
 
 
   humidity.textContent =
@@ -278,7 +299,9 @@ async function searchWeather(city) {
 
   try {
 
-    // Convert city name into latitude and longitude
+    /*
+     * First find the city coordinates.
+     */
     const location =
       await findCity(city);
 
@@ -287,7 +310,10 @@ async function searchWeather(city) {
       `Getting live weather for ${location.name}...`;
 
 
-    // Get weather using the coordinates
+    /*
+     * Then get live weather using latitude
+     * and longitude.
+     */
     const weather =
       await fetchWeather(
         location.latitude,
@@ -295,12 +321,18 @@ async function searchWeather(city) {
       );
 
 
+    /*
+     * Display the current weather.
+     */
     renderCurrentWeather(
       location,
       weather
     );
 
 
+    /*
+     * Display the 5-day forecast.
+     */
     renderForecast(weather);
 
 
@@ -328,7 +360,9 @@ async function searchWeather(city) {
 
     } else {
 
-      showError(error.message);
+      showError(
+        error.message
+      );
 
     }
 
@@ -345,6 +379,9 @@ async function searchWeather(city) {
 }
 
 
+/*
+ * Handle the search form.
+ */
 searchForm.addEventListener(
   "submit",
   async (event) => {
@@ -374,5 +411,8 @@ searchForm.addEventListener(
 );
 
 
-// Load a default city when the page opens
+/*
+ * Load Bengaluru automatically when
+ * the dashboard first opens.
+ */
 searchWeather("Bengaluru");
