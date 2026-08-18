@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Real-time weather dashboard">
+  <title>Weather Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+  <main class="app">
+
+    <header class="hero">
+      <p class="eyebrow">Assignment 4</p>
+      <h1>Weather Dashboard</h1>
+      <p class="subtitle">
+        Search any city to see live weather information.
+      </p>
+    </header>
+
+    <section class="search-card">
+
+      <form id="searchForm">
+
+        <label for="cityInput">City name</label>
+
+        <div class="search-row">
+
+          <input
+            id="cityInput"
+            type="search"
+            placeholder="Enter city name"
+            autocomplete="off"
+            required
+          >
+
+          <button id="searchButton" type="submit">
+            Search
+          </button>
+
+        </div>
+
+      </form>
+
+      <p id="status" class="status"></p>
+
+      <div id="error" class="error" hidden></div>
+
+    </section>
+
+
+    <section id="weatherDashboard" class="dashboard" hidden>
+
+      <div class="location-heading">
+
+        <div>
+          <p class="eyebrow">Current Weather</p>
+
+          <h2 id="locationName">—</h2>
+
+          <p id="locationDetails">—</p>
+        </div>
+
+        <div id="weatherIcon" class="weather-icon">
+          ☀️
+        </div>
+
+      </div>
+
+
+      <div class="current-grid">
+
+        <article class="metric-card featured">
+          <span>Temperature</span>
+          <strong id="temperature">—</strong>
+          <small id="condition">—</small>
+        </article>
+
+
+        <article class="metric-card">
+          <span>Humidity</span>
+          <strong id="humidity">—</strong>
+          <small>Relative humidity</small>
+        </article>
+
+
+        <article class="metric-card">
+          <span>Wind Speed</span>
+          <strong id="windSpeed">—</strong>
+          <small>10 m wind</small>
+        </article>
+
+
+        <article class="metric-card">
+          <span>Feels Like</span>
+          <strong id="feelsLike">—</strong>
+          <small>Apparent temperature</small>
+        </article>
+
+      </div>
+
+
+      <section class="forecast-section">
+
+        <p class="eyebrow">Forecast</p>
+
+        <h3>Next 5 Days</h3>
+
+        <div id="forecast" class="forecast-grid"></div>
+
+      </section>
+
+
+      <p class="source">
+        Weather data provided by
+        <a
+          href="https://open-meteo.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open-Meteo
+        </a>.
+      </p>
+
+    </section>
+
+  </main>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
